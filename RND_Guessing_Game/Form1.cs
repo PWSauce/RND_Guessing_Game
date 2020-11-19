@@ -12,26 +12,25 @@ namespace RND_Guessing_Game
 {
     public partial class Form1 : Form
     {
-        int numRnd;
+        int randNum;
         int numOfGuesses = 0;
+        Random random = new Random();
         public Form1()
         {
             InitializeComponent();
-            NumRand();
+            NewNumber();
         }
 
-        public void NumRand()
+        public void NewNumber()
         {
-            numRnd = new Random().Next(1, 101);
+            randNum = random.Next(1, 101);
             numOfGuesses = 0;
         }
         public void CheckGuess(string guessStr)
         {
-            textBox1.SelectionStart = 0;
-            textBox1.SelectionLength = textBox1.Text.Length;
             int guess = int.Parse(guessStr);
             numOfGuesses++;
-            if (guess == numRnd)
+            if (guess == randNum)
             {
                 Output.Lines = new string[]
                 {
@@ -40,16 +39,21 @@ namespace RND_Guessing_Game
                   $"Num of guesses: {numOfGuesses}",
                   "Guess a new number to play",
                 };
-                NumRand();
+                NewNumber();
             }
-            else if (guess < numRnd)
+            else if (guess < randNum)
             {
                 Output.Text = "Too low";
             }
-            else if (guess > numRnd)
+            else if (guess > randNum)
             {
                 Output.Text = "Too high";
             }
+        }
+        private void ReFocus()
+        {
+            textBox1.SelectionStart = 0;
+            textBox1.SelectionLength = textBox1.Text.Length;
         }
         private void Return_KeyDown(object sender, KeyEventArgs e)
         {
@@ -57,12 +61,14 @@ namespace RND_Guessing_Game
             {
                 e.SuppressKeyPress = true;
                 CheckGuess(textBox1.Text);
+                ReFocus();
             }
         }
 
         private void Submit_Button(object sender, EventArgs e)
         {
             CheckGuess(textBox1.Text);
+            ReFocus();
         }
     }
 }
